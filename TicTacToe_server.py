@@ -1,6 +1,6 @@
 import socket       
 import sys
-from tris import Tris
+from TicTacToe import TicTacToe
 
 host = "127.0.0.1"  
 port = 5001
