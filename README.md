@@ -1,2 +1,2 @@
-# Tris-with-socket
+# TicTacToe-with-socket
 ENJOY IT!
