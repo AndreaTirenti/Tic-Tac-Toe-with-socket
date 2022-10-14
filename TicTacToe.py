@@ -1,4 +1,4 @@
-class Tris():
+class TicTacToe():
     def __init__(self, player1, player2, board):
         self.board = board
         self.PLAYER1_SIGN = player1
