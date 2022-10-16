@@ -1,10 +1,8 @@
 import socket      
 import sys
-from TicTacToe import TicTacToe
 
 host = "127.0.0.1"
 port = 5001
-
 
 
 try:
@@ -18,60 +16,22 @@ print("Connection established with success...")
 
 
 
-
-board = {
-        1 : "_", 2 : "_" , 3 : "_" ,
-        4 : "_", 5 : "_" , 6 : "_" ,
-        7 : "_", 8 : "_" , 9 : "_" ,
-        }
-
-PLAYER1 = "X"
-PLAYER2 = "O"
-
-TicTacToe = TicTacToe(PLAYER1, PLAYER2, board)
-
-
 print("TRIS")
-print("Client is X and Server is O")
+print("Client is O and Server is X")
 
-turn = 0
 
 while 1:
-    if TicTacToe.Check_Win(board) != 0:
-        my_sock.send("break".encode())
+    board = my_sock.recv(256)
+    if board.decode() == "break":
+        print("break\n")
         break
+    print("\nClient make your move according this scheme:\n1 | 2 | 3\n--+---+--\n4 | 5 | 6\n--+---+--\n7 | 8 | 9\n")
+    print(board.decode())
+    move = input("Make your move-> ")
+    my_sock.send(move.encode())
 
-    if turn % 2 == 0:
-        print("Client make your move according this scheme:\n1 | 2 | 3\n--+---+--\n4 | 5 | 6\n--+---+--\n7 | 8 | 9\n")
-        print(TicTacToe.Print_Board(board)) 
-        TicTacToe.Player_Move(board, PLAYER1)
-        if TicTacToe.Check_Win(board) != 0:
-            my_sock.send("break".encode())
-            break
-        else:
-            my_sock.send(TicTacToe.Print_Board(board).encode())
-    else:
-        move = my_sock.recv(256)
-        if board[int(move.decode())] != "_":
-            print("WRONG MOVE!")
-            exit(0)
-        board[int(move.decode())] = PLAYER2
 
-    turn+=1
-
-result = TicTacToe.Check_Win(board)
-if result == 0:
-    print(TicTacToe.Print_Board(board))
-    print("DRAW!")
-    my_sock.send("DRAW!".encode())
-elif result == 10:
-    print(TicTacToe.Print_Board(board))
-    print("CLIENT WINS!")
-    my_sock.send("CLIENT WINS!".encode())
-elif result == -10:
-    print(TicTacToe.Print_Board(board))
-    print("SERVER WINS!")
-    my_sock.send("SERVER WINS!".encode())
-
+result = my_sock.recv(256)
+print(result.decode())
 
 my_sock.close()
